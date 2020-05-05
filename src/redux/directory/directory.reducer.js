@@ -19,7 +19,7 @@ const INITIAL_STATE = {
       title: 'sneakers',
       subtitle: 'shop now',
       imageUrl: 'https://i.ibb.co/0jqHpnp/sneakers.png',
-      linkUrl: 'shop/sneekers'
+      linkUrl: 'shop/sneakers'
     },
     {
       id: 4,

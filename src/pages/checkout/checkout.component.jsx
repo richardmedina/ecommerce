@@ -7,7 +7,12 @@ import { selectCartItems, selectCartTotal } from 'redux/cart/cart.selectors'
 import CheckoutItem from 'components/checkout-item/checkout-item.component'
 import StripeButton from 'components/stripe-button/stripe-button.component'
 
-import './checkout.styles.scss'
+import {
+    CheckoutPageContainer,
+    CheckoutHeader,
+    Total,
+    TestWarning
+} from './checkout.styles'
 
 const HeaderBlock = ({ item }) => (
     <div className='header-block'>
@@ -16,27 +21,24 @@ const HeaderBlock = ({ item }) => (
 )
 
 const CheckoutPage = ({ cartItems, total }) => (
-    <div className='checkout-page'>
-        <div className='checkout-header'>
+    <CheckoutPageContainer>
+        <CheckoutHeader>
             {
                 ['Product', 'Description', 'Quantity', 'Price', 'Remove']
-                    .map(item =>
-                        <HeaderBlock key={item} item={item} />
-                    )
+                    .map(item => <HeaderBlock key={item} item={item} />)
             }
-        </div>
+        </CheckoutHeader>
         {
             cartItems.map(cartItem => <CheckoutItem key={cartItem.id} cartItem={cartItem} />)
         }
-        <div className='total'>Total {total}</div>
-        <div className='test-warning'>
+        <Total>Total {total}</Total>
+        <TestWarning>
             Please use the following test credit card for *payments
             <br />
             4242 4242 4242 4242  - Exp 01/21 - CVV: 123
-
-        </div>
+        </TestWarning>
         <StripeButton price={total} />
-    </div>
+    </CheckoutPageContainer>
 )
 
 
