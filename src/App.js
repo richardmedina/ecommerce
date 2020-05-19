@@ -10,43 +10,46 @@ import CheckoutPage from 'pages/checkout/checkout.component'
 
 import Header from 'components/header/header.component'
 
-import { auth, createUserProfileDocument, addCollectionAndDocuments } from 'firebase/firebase.utils'
-import { setCurrentUser } from './redux/user/user.actions'
+import { setCurrentUser, checkUserSession } from './redux/user/user.actions'
 
 import { selectCollectionsForPreview } from 'redux/shop/shop.selectors'
 
 class App extends React.Component {
-  unsubscribeFromAuth = null;
+  //unsubscribeFromAuth = null;
 
   componentDidMount() {
-    const { setCurrentUser, collectionsArray } = this.props
 
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+    const { checkUserSession } = this.props
 
-      if(userAuth) {
-        const userRef = await createUserProfileDocument(userAuth);
-        userRef.onSnapshot(snapshot => { 
-          console.log("Logged in as ", snapshot.data());
-          setCurrentUser({
-            currentUser: {
-              id: snapshot.id,
-              ...snapshot.data()
-            }
-          })
-        })
-      }
-      else {
-        console.log("User logout")
-        setCurrentUser(userAuth)
-      }
-    })
+    checkUserSession()
+    // const { setCurrentUser, collectionsArray } = this.props
+
+    // this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+
+    //   if(userAuth) {
+    //     const userRef = await createUserProfileDocument(userAuth);
+    //     userRef.onSnapshot(snapshot => { 
+    //       console.log("Logged in as ", snapshot.data());
+    //       setCurrentUser({
+    //         currentUser: {
+    //           id: snapshot.id,
+    //           ...snapshot.data()
+    //         }
+    //       })
+    //     })
+    //   }
+    //   else {
+    //     console.log("User logout")
+    //     setCurrentUser(userAuth)
+    //   }
+    // })
     // Utility for adding collections to firestore
     // addCollectionAndDocuments('collections', collectionsArray.map(({ title, items }) => ({ title, items})))
   }
 
-  componentWillUnmount() {
-    this.unsubscribeFromAuth()
-  }
+  // componentWillUnmount() {
+  //   this.unsubscribeFromAuth()
+  // }
 
   render() {
     return (
@@ -72,7 +75,8 @@ const mapStateToProps = state => ({
   collectionsArray: selectCollectionsForPreview(state)
 })
 const mapDispatchToProps = dispatch => ({
-  setCurrentUser: user => dispatch(setCurrentUser(user))
+  setCurrentUser: user => dispatch(setCurrentUser(user)),
+  checkUserSession: () => dispatch(checkUserSession())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
